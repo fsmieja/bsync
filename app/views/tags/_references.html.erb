@@ -1,0 +1,57 @@
+
+<table class="url-list sortable">
+	<tr>
+		<th>Project</th>
+		<th>Number of times</th>
+	</tr>	
+	<% projects.each do |p| %>
+	<tr>
+		<td><%= p.name %></td>
+		<td><%= project_numbers[:project_id => p.id] %></td>
+	</tr>
+	<% end %>
+</table>
+
+<% if messages.any? %>
+
+
+<table class="url-list sortable">
+	<tr>
+		<th>Project</th>
+		<th>Message Title</th>
+		<th>Message Content</th>
+	</tr>	
+	<% messages.each do |m| %>
+	<tr>
+	<%
+		 stripped_m = strip_tags(m.content.gsub(/&nbsp;/i," ").gsub(/<div class=\"paragraph\_break\"/i,"&#013; &#010;<div ")) 
+		 summary = raw stripped_m.size<=100 ? stripped_m : "#{stripped_m[0..100]}..."
+	%> 
+		<td><%= m.project.name %></td>
+		<td><%= link_to m.title, message_path(m.id) %></td>
+		<td><%= summary %></td>
+	</tr>
+	<% end %>
+</table>
+<% end %>
+<% if comments.any? %>
+
+<table class="url-list sortable">
+	<tr>
+		<th>Project</th>
+		<th>Related Message</th>
+		<th>Comment Content</th>
+	</tr>	
+	<% comments.each do |c| %>
+	<tr>
+		<%
+		 stripped_c = strip_tags(c.content.gsub(/&nbsp;/i," ").gsub(/<div class=\"paragraph\_break\"/i,"&#013; &#010;<div ")) 
+		 title = raw stripped_c.size<=100 ? stripped_c : "#{stripped_c[0..100]}..." 
+		%>
+		<td><%= link_to c.project.name, project_path(c.project.id) %></td>
+		<td><%= link_to c.message.title, message_path(c.message.id) %></td>
+		<td><%= link_to title, comment_path(c.id) %></td>
+	</tr>
+	<% end %>
+</table>
+<% end %>

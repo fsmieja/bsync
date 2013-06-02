@@ -1,0 +1,6 @@
+	// remove the row
+	$('tr#<%= @id %>').hide();
+	var numVisible = $('tr:visible').length;
+	if (numVisible == 1) {
+		$('table').hide();
+	}

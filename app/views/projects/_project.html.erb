@@ -1,0 +1,17 @@
+
+<tr>
+<% if project.basecamp_id.nil? %>
+	<td><%= link_to(project.name, project_path(project)) %></td>
+	<td><%= project.created_at.to_formatted_s(:long) %></td>
+	<td><%= project.updated_at.to_formatted_s(:long) %></td>
+	<td><%= project.messages.count %></td>
+	<td><%= project.tags.count %></td>
+<% else %>
+	<td><%= project.id.nil? ? project.name : link_to(project.name, project_path(project)) %></td>
+	<td><%= project.created_on.to_formatted_s(:long) %></td>
+	<td><%= project.last_changed_on.nil? ? "Never" : project.last_changed_on.to_formatted_s(:long) %></td>
+	<td><%= project.status %></td>
+	<td><%= project.company_name %></td>
+	<td><%= project.id.nil? ? button_to('Import', import_project_path(project.basecamp_id)) : button_to('Re-import', reimport_project_path(project)) %></td>
+<% end %>
+</tr>

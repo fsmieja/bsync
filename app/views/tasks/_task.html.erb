@@ -1,0 +1,7 @@
+  <tr style="border: 1px solid black">
+    <td><%= task.id.nil? ? task.content : link_to("#{task.content[0..70]}"+"#{'...' if task.content.length>70}", task_path(task)) %></td>
+    <td><%= task.num_comments %></td>
+    <td><%= task.start_on.to_formatted_s(:long) if !task.start_on.nil? %></td>
+    <td><%= task.complete_on.to_formatted_s(:long) if !task.complete_on.nil? %></td>
+    <td><%= task.id.nil? ? link_to('Import', import_task_path(task)) : link_to('Re-Import', reimport_task_path(task)) %></td>
+  </tr>

@@ -1,0 +1,13 @@
+<% if @added %>
+	<% if @num_comments==1 %>
+		$('#comment-count').append('<%= link_to(@num_comments, message_comments_path(@message.id), :id => "num-comments") %>');
+		$("#no-comments").remove();
+	<% else %>
+		$('#num-comments').text('<%= @num_comments %>');
+	<% end %>
+	$('#num-comments').effect("highlight", {}, 3000);
+	$("form#new_comment")[0].reset();	
+<% else %>
+  alert('<%= @tag_message %>');
+<% end %>
+

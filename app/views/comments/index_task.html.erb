@@ -1,0 +1,22 @@
+
+<h1>
+	All Comments for Task '<%=@task.content %>'
+</h1>
+<%= will_paginate @comments, :class => 'flickr_pagination' %>
+<table class="url-list sortable">
+  <tr>
+    <th>Author</th>
+    <th>Content</th>
+    <th><%= sortable('num_attachments','Attachments') %></th>
+    <th><%= sortable('posted_on', 'Posted') %></th>
+    <th></th>
+  </tr>
+<%= render @comments %>
+
+</table>
+<%=  button_to "(Re-)Import All", import_task_comments_path(@task), :confirm => "Warning: all existing comments for this task will be deleted first!" %>
+
+<%= link_to "Task", task_path(@task.id)%> |
+<%= link_to "All Tasks", project_tasks_path(@task.project_id)%> |
+<%= link_to "Project", project_path(@task.project_id)%>
+

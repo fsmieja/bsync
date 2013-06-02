@@ -1,0 +1,52 @@
+
+<p>
+  <b>Name:</b>
+  <%= @project.name %>
+</p>
+
+<% if @project.basecamp_id %> 
+<p>
+  <b>Announcement:</b>
+  <%= @project.announcement %>
+</p><p>
+  <b>Created:</b>
+  <%= @project.created_on %>
+</p>
+<p>
+  <b>Last updated:</b>
+  <%= @project.last_changed_on %>
+</p>
+<p>
+  <b>Status:</b>
+  <%= @project.status %>
+</p>
+<p>
+  <b>Basecamp id:</b>
+  <%= @project.basecamp_id %>
+</p>
+
+<% else %>
+<p>
+  <b>Description:</b>
+  <%= @project.description %>
+</p><p>
+  <b>Created:</b>
+  <%= @project.created_at %>
+</p>
+<p>
+  <b>Last updated:</b>
+  <%= @project.updated_at %>
+</p>
+<% end %>
+<p>
+  <b>Messages:</b>
+  <%= link_to(@num_messages, project_messages_path(@project.id)) %> 
+</p>
+<p>
+  <b>Comments:</b>
+  <%= link_to(@num_comments, project_comments_path(@project.id)) %> 
+</p>
+  <b>Tasks:</b>
+  <%= link_to(@num_tasks, project_tasks_path(@project.id)) %> 
+</p>
+<%= link_to 'All Projects', projects_path %>

@@ -1,0 +1,53 @@
+<table>
+
+<tr>
+	<td><b>Owner:</b></td>
+  	<td><%= @task.owner %></td>
+</tr>
+<tr>
+	<td><b>Created:</b></td>
+  	<td><%= @task.start_on %></td>
+</tr>
+<tr>
+	<td><b>Due:</b></td>
+  	<td><%= @task.complete_on %></td>
+</tr>
+<tr>
+	<td><b>Comments:</b></td>
+	<td>
+  <% if @num_comments>0 %>
+    <%= link_to(@num_comments, task_comments_path(@task.id)) %>
+  <% else %>
+    None
+  <% end %>
+	</td>
+</tr>
+
+<tr>
+	<td><b>Basecamp ID:</b></td>
+  	<td><%= @task.basecamp_id %></td>
+</tr>
+</table>
+</p>
+
+  
+<div id="wrapper">
+    <ul class="tabs">
+        <li><a href="javascript:void(0)" class="defaulttab" rel="tabs1">HTML View</a></li>
+        <li><a href="javascript:void(0)" rel="tabs2">Raw Content</a></li>
+        <li><a href="javascript:void(0)" rel="tabs3">Stripped of Tags</a></li>
+    </ul>
+ 
+    <div class="tab-content" id="tabs1"><div id="htmlpreview" class="html"><%= raw @task.content %></div></div>
+    <div class="tab-content" id="tabs2"><textarea class="raw"><%= @task.content %></textarea> </div>
+    <div class="tab-content" id="tabs3">
+    	<textarea class="stripped"><%= raw strip_tags(@task.content.gsub(/&nbsp;/i," ").gsub(/<div class=\"paragraph\_break\"/i,"&#013; &#010;<div ")) %></textarea> 
+    </div>
+</div>  
+  
+
+
+</p>
+
+
+<%= link_to 'All Tasks', project_tasks_path(@task.project_id) %>

@@ -1,0 +1,24 @@
+  <%= form_tag "/#{controller}/#{id}/tag", :remote => true, :id => "new-tag-form" do %>
+  	<%= text_field_tag :new_tag %>	
+  	<%= submit_tag 'Add Tag' %>  
+  <% end %>
+
+
+<script>
+$(function() {
+
+var availableTags = [
+	<% all_tags.each_with_index do |t,i| %>
+	   <% if i>0 %>
+	     ,
+	   <% end %> 
+		"<%= t.name %>"
+	<% end %>
+];
+
+$("#new_tag").autocomplete({
+	source: availableTags
+});
+
+});
+</script>

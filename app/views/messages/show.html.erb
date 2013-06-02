@@ -1,0 +1,100 @@
+
+<table>
+
+<tr>
+	<td><b>Title:</b></td>
+	<td><%= @message.title %></td>
+</tr>
+
+<% if @message.basecamp_id %>
+<tr>
+	<td><b>Author:</b></td>
+  	<td><%= @message.author %></td>
+</tr>
+<tr>
+	<td><b>Posted:</b></td>
+  	<td><%= @message.posted_on %></td>
+</tr>
+<% else %>
+<tr>
+	<td><b>Created:</b></td>
+  	<td><%= @message.created_at %></td>
+</tr>
+<% end %>
+<tr>
+	<td><b>Comments:</b></td>
+	<td id="comment-count">
+  <% if @num_comments>0 %>
+    <%= link_to(@num_comments, message_comments_path(@message.id), :id => 'num-comments') %>
+  <% else %>
+    <span id="no-comments">None</span>
+  <% end %>
+	</td>
+</tr>
+<tr>
+	<td><b>Attachments:</b></td>
+	<td>
+  <% if @message.attachments.empty? %>
+     None
+  <% else
+     @message.attachments.each do |a| %>
+     	<%= link_to("#{a.name} (#{a.attachment_type})", "#{a.basecamp_url}") %> |
+     <%	end %>
+  <% end %>
+	</td>
+</tr>
+<% if @message.basecamp_id %>
+<tr>
+	<td><b>Basecamp ID:</b></td>
+  	<td><%= @message.basecamp_id %></td>
+</tr>
+<% end %>
+</table>
+</p>
+
+
+<% 
+actions_text = ""
+@actions.each_with_index do |a,i| 
+  actions_text += "#{i+1}.\t#{a}\n" 
+end 
+events_text = ""
+@events.each_with_index do |e,i| 
+  events_text += "#{i+1}.\t#{e}\n" 
+end 
+%>
+
+
+<div id="wrapper">
+    <ul class="tabs">
+        <li><a href="javascript:void(0)" class="defaulttab" rel="tabs1">HTML View</a></li>
+        <li><a href="javascript:void(0)" rel="tabs2">Raw Content</a></li>
+        <li><a href="javascript:void(0)" rel="tabs3">Stripped of Tags</a></li>
+        <li><a href="javascript:void(0)" rel="tabs4">Actions (<%= @actions.count %>)</a></li>
+        <li><a href="javascript:void(0)" rel="tabs5">Events (<%= @events.count %>)</a></li>
+        <li><a href="javascript:void(0)"  rel="tabs6"><span id="tag-header">Tags (<%= @tags.count %>)</span></a></li>
+    </ul>
+  
+  <%= render 'tags/add_tag', :id => @message.id, :controller => "messages", :all_tags => @all_tags %>
+
+    <div class="tab-content" id="tabs1"><div id="htmlpreview" class="html"><%= raw @message.content %></div></div>
+    <div class="tab-content" id="tabs2"><textarea class="raw"><%= @message.content %></textarea> </div>
+    <div class="tab-content" id="tabs3">
+    	<textarea class="stripped"><%= raw strip_tags(@message.content.gsub(/&nbsp;/i," ").gsub(/<div class=\"paragraph\_break\"/i,"&#013; &#010;<div ")) %></textarea> 
+    </div>
+    <div class="tab-content" id="tabs4"><textarea class="stripped"><%= actions_text %></textarea></div>
+    <div class="tab-content" id="tabs5"><textarea class="stripped"><%= events_text %></textarea></div>
+    <div class="tab-content" id="tabs6"><%= render 'tags/tag_list', :tags => @tags, :id => @message.id, :controller => "messages"%>
+
+    </div>
+</div>  
+  
+
+
+</p>
+
+<% if !@message.basecamp_id %>
+	<%= render 'comments/add_comment', :message_id => @message.id, :comment => @comment %>
+<% end %>
+
+<%= link_to 'All Messages', project_messages_path(@message.project_id) %>

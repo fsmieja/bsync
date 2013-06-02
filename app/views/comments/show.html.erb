@@ -1,0 +1,77 @@
+<% 
+actions_text = ""
+@actions.each_with_index do |a,i| 
+  actions_text += "#{i+1}.\t#{a}\n" 
+end 
+events_text = ""
+@events.each_with_index do |e,i| 
+  events_text += "#{i+1}.\t#{e}\n" 
+end 
+%>
+<p>
+  <b>Message Title:</b>
+  <%= @comment.message.title %>
+</p>
+<% if @comment.basecamp_id %>
+<p>
+  <b>Author:</b>
+  <%= @comment.author %>
+</p>
+<p>
+  <b>Posted:</b>
+  <%= @comment.posted_on %>
+</p>
+<% else %>
+<p>
+  <b>Created:</b>
+  <%= @comment.created_at %>
+</p>
+<% end %>
+<p>
+  <b>Attachments:</b>
+  <% if @comment.attachments.empty? %>
+     None
+  <% else
+     @comment.attachments.each do |a| %>
+     	<%= link_to("#{a.name} (#{a.attachment_type})", "#{a.basecamp_url}") %> |
+     <%	end %>
+  <% end %>
+</p>
+<% if @comment.basecamp_id %>
+<p>
+  <b>Basecamp ID:</b>
+  <%= @comment.basecamp_id %>
+</p>
+<% end %>
+<p>
+  <b>Content:</b><br/>
+  
+<div id="wrapper">
+    <ul class="tabs">
+        <li><a href="javascript:void(0)" class="defaulttab"  rel="tabs1">HTML View</a></li>
+        <li><a href="javascript:void(0)" rel="tabs2">Raw Content</a></li>
+        <li><a href="javascript:void(0)" rel="tabs3">Stripped of Tags</a></li>
+        <li><a href="javascript:void(0)" rel="tabs4">Actions (<%= @actions.count %>)</a></li>
+        <li><a href="javascript:void(0)" rel="tabs5">Events (<%= @events.count %>)</a></li>
+        <li><a href="javascript:void(0)"  rel="tabs6"><span id="tag-header">Tags (<%= @tags.count %>)</span></a></li>
+    </ul>
+  <%= render 'tags/add_tag', :id => @comment.id, :controller => "comments", :all_tags => @all_tags %>
+ 
+    <div class="tab-content" id="tabs1"><div id="htmlpreview" class="html"><%= raw @comment.content %></div></div>
+    <div class="tab-content" id="tabs2"><textarea class="raw"><%= @comment.content %></textarea> </div>
+    <div class="tab-content" id="tabs3">
+    	<textarea class="stripped"><%= raw strip_tags(@comment.content.gsub(/&nbsp;/i," ").gsub(/<div class=\"paragraph\_break\"/i,"&#013; &#010;<div ")) %></textarea> 
+    </div>
+    <div class="tab-content" id="tabs4"><textarea class="stripped"><%= actions_text %></textarea></div>
+    <div class="tab-content" id="tabs5"><textarea class="stripped"><%= events_text %></textarea></div>
+    <div class="tab-content" id="tabs6"><%= render 'tags/tag_list', :tags => @tags, :id => @comment.id, :controller => "comments"%>
+</div>  
+  
+
+
+</p>
+
+
+<%= link_to 'Edit', edit_comment_path(@comment) %> |
+<%= link_to 'Message', message_path(@comment.message_id) %> |
+<%= link_to 'All Comments', message_comments_path(@comment.message_id) %>

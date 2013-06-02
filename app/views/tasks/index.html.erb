@@ -1,0 +1,20 @@
+<h1>Tasks for Project '<%=@project.name%>'</h1>
+
+<%= will_paginate @tasks, :class => 'flickr_pagination' %>
+
+<table class="url-list sortable">
+  <tr>
+    <th>Title</th>
+    <th><%= sortable("num_comments", "Comments?") %></th>
+    <th><%= sortable("start_on", "Created") %> </th>
+    <th><%= sortable("complete_on", "To be completed") %> </th>
+    <th></th>
+  </tr>
+<%= render @tasks %>
+
+</table>
+<%=  button_to "(Re-)Import All", import_tasks_path(@project), :confirm =>"Are you sure?  All tasks for this project will be deleted first...", :class => 'inline'%>
+<%=  button_to "Discover New", discover_tasks_path(@project)%>
+
+<%= link_to "Project", project_path(@project)%> |
+<%= link_to "All Projects", projects_path %> 

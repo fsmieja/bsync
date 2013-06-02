@@ -1,0 +1,55 @@
+<h1>Messages for Project '<%=@project.name%>'</h1>
+
+
+<%= will_paginate @messages, :class => 'flickr_pagination' %>
+
+<table class="cloud-and-table">
+	<tr>
+		<td width="15%">
+			<table id="tag-list" class="url-list sortable">
+  			<tr>
+    			<th id="cloud-header">Tag Cloud</th>
+			</tr>
+			<tr >
+				<td style="padding: 5px">
+					<%= render 'tags/tag_cloud', :tags => @tags, :tag_numbers => @tag_numbers %>
+				</td>
+			</tr>
+			</table>	
+		</td>
+		<td>
+			<table id="table-list" class="url-list sortable">
+  			<tr>
+    			<th id="list-header">Title</th>
+    			<% if @project.basecamp_id %>
+	    			<th><%= sortable("num_comments", "Comments?") %></th>
+	    			<th><%= sortable("num_attachments", "Attachments?") %></th>
+    				<th><%= sortable("posted_on", "Posted") %> </th>
+    			<% else %>
+	    			<th>Num Comments</th>
+      				<th><%= sortable("created_at", "Created") %> </th>
+      				<th><%= sortable("updated_at", "Updated") %> </th>
+				<% end %>
+    			<th></th>
+  			</tr>
+				<%= render @messages %>
+			</table>
+		</td>	
+	</tr>
+</table>
+<% if @project.basecamp_id %>
+<%=  button_to "(Re-)Import All", import_messages_path(@project), :confirm =>"Are you sure?  All messages for this project will be deleted first...", :class => 'inline' %>
+<%=  button_to "Discover new", discover_messages_path(@project)%>
+<%= link_to "Project", project_path(@project)%> |
+<%= link_to "All Projects", basecamp_projects_path %> 
+<% else %>
+<%= button_to "Create Note", new_project_message_path(@project.id), :method => 'get' %>
+<%= link_to "Project", project_path(@project)%> |
+<%= link_to "All Projects", projects_path %> 
+<% end %>
+
+<script>
+	$('#tag-list').height($('#table-list').height());
+	$('#cloud-header').height($('#list-header').height());
+	
+</script>

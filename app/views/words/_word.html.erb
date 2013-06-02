@@ -1,0 +1,5 @@
+<tr>
+	<td><%= link_to word.word, edit_word_path(word) %></td>
+	<td><%= word.word_type %></td>
+	<td><%= link_to "Delete", word_path(word), :method => 'delete', :remote => true %></td>
+</tr>

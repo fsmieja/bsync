@@ -1,0 +1,33 @@
+
+<h1>
+	All Comments for Message '<%=@message.title%>'
+</h1>
+<%= will_paginate @comments, :class => 'flickr_pagination' %>
+<table class="url-list sortable">
+  <tr>
+  <% if @message.basecamp_id %>
+    <th>Author</th>
+    <th>Content</th>
+    <th><%= sortable('num_attachments','Attachments') %></th>
+    <th><%= sortable('posted_on', 'Posted') %></th>
+    <th></th>
+  <% else %>
+    <th>Content</th>
+    <th><%= sortable('num_attachments','Attachments') %></th>
+    <th><%= sortable('created_at', 'Created') %></th>
+    <th></th>
+  <% end %>
+  </tr>
+<%= render @comments %>
+
+</table>
+<% if @message.basecamp_id %>
+	<%=  button_to "(Re-)Import All", import_message_comments_path(@message), :confirm => "Warning: all existing comments for this message will be deleted first!" %>
+<% else %>
+	<%=  button_to "Add Comment", add_message_comment_path(@message) %>
+<% end %>
+
+<%= link_to "Message", message_path(@message.id)%> |
+<%= link_to "All Messages", project_messages_path(@message.project_id)%> |
+<%= link_to "Project", project_path(@message.project_id)%>
+

@@ -1,0 +1,14 @@
+  <tr>
+<% if message.basecamp_id %>
+    <td ><%= message.id.nil? ? message.title : link_to(message.title, message_path(message)) %></td>
+    <td style="text-align: center"><%= message.num_comments %></td>
+    <td style="text-align: center"><%= message.num_attachments %></td>
+    <td style="width: 150px"><%= message.posted_on.to_formatted_s(:long) %></td>
+    <td><%= message.id.nil? ? link_to('Import', import_message_path(message)) : link_to('Re-Import', reimport_message_path(message)) %></td>
+<% else %>
+    <td><%= link_to(message.title, message_path(message)) %></td>
+    <td style="text-align: center"><%= message.comments.count==0 ? "0" : link_to(message.comments.count, message_comments_path(message)) %></td>
+    <td style="width: 150px"><%= message.created_at.to_formatted_s(:long) %></td>
+    <td style="width: 150px"><%= message.updated_at.to_formatted_s(:long) %></td>
+<% end %>
+  </tr>

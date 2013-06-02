@@ -1,0 +1,23 @@
+<div id="tag-list">
+  <ul class="price-tag">
+  	<li></li>
+  <% tags.each_with_index do |t,i| %>
+    <%= render 'tags/tag_label', :tag => t, :id => id, :controller => controller %>
+  <% end %>
+  </ul>
+</div>
+
+
+<script>
+/*
+$(".popup").hover(function(){
+   $(this).css('background-color','red');
+   $(this).css('color','white');
+});
+
+$(".popup").live("mouseout", function(){
+   $(this).css('background-color','#fea500');
+   $(this).css('color','black');
+});
+*/
+</script>

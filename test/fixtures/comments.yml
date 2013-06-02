@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  content: MyText
+  author: MyString
+  basecamp_id: 1
+  posted_on: 2013-05-07 13:52:03
+  message_id: 1
+
+two:
+  content: MyText
+  author: MyString
+  basecamp_id: 1
+  posted_on: 2013-05-07 13:52:03
+  message_id: 1

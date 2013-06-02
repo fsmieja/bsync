@@ -1,0 +1,5 @@
+<%= form_for comment, :url => add_message_comment_path, :remote => true do |f| %>
+	<%= f.text_area :content, :class => "add-comment" %><br/>
+	<%= f.submit "Add Comment" %>
+	<%= hidden_field_tag "id", message_id %>
+<% end %>
