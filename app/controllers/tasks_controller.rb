@@ -28,14 +28,20 @@ class TasksController < ApplicationController
 
   def discover
     project = Project.find(params[:id])
-    startnum = project.messages.count
+    startnum = project.tasks.count
     if !Task.discover_new_from_basecamp(project)
       flash[:error] = "Error importing new tasks"
     else
       additional_num = project.tasks.count-startnum
       flash[:notice] = additional_num > 0 ? "Successfully imported #{additional_num} new tasks" : "No new tasks to import"
     end
-    redirect_to project_tasks_path(params[:id])
+    redirect_to project_path(params[:id])
+  end
+
+  def destroy
+    project = Project.find(params[:id])
+    Task.destroy_project_tasks(project)    
+    redirect_to project_path(project), :notice => "Removed tasks"     
   end
 
   def import_all
@@ -45,7 +51,7 @@ class TasksController < ApplicationController
     else
       flash[:error] = "There was a problem importing the tasks"
     end
-    redirect_to project_tasks_path(project.id)
+    redirect_to project_path(project.id)
   end
  
   def reimport

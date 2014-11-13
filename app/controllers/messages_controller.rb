@@ -11,7 +11,7 @@ class MessagesController < ApplicationController
     order_str = sort_column + " "  + sort_direction
     @messages = @project.messages.order(order_str).page(params[:page]).per_page(@per_page)
     add_tag_numbers_across_messages(@messages)
-    @tags = (@project.message_tags + @project.comment_tags).uniq
+    @tags = (@project.message_tags + @project.message_comment_tags + @project.task_comment_tags).uniq
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @messages }
@@ -86,6 +86,9 @@ class MessagesController < ApplicationController
     
   def show
     @message = Message.find(params[:id])
+    if @message.content.nil?
+      @message.content = ""
+    end
     if @message.basecamp_id
       comments = Basecamp::Comment.find(:all, :params => { :post_id => @message.basecamp_id })
     else
@@ -111,7 +114,7 @@ class MessagesController < ApplicationController
     else
       flash[:error] = "There was a problem importing the messages"
     end
-    redirect_to project_messages_path(project.id)
+    redirect_to project_path(project.id)
   end
  
   def import
@@ -135,6 +138,12 @@ class MessagesController < ApplicationController
     redirect_to project_messages_path(message.project_id)
   end
   
+  def destroy
+    project = Project.find(params[:id])
+    Message.destroy_project_messages(project)    
+    redirect_to project_path(project), :notice => "Removed messages"     
+  end
+  
   def discover
     project = Project.find(params[:id])
     startnum = project.messages.count
@@ -142,7 +151,7 @@ class MessagesController < ApplicationController
       redirect_to project_messages_path(params[:id]), :error => "Error importing new messages"
     end
     additional_num = project.messages.count-startnum
-    redirect_to project_messages_path(params[:id]), :notice => additional_num > 0 ? "Successfully imported #{additional_num} new messages" : "No new messages to import"
+    redirect_to project_path(params[:id]), :notice => additional_num > 0 ? "Successfully imported #{additional_num} new messages" : "No new messages to import"
   end  
   
   private

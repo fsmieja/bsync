@@ -3,6 +3,9 @@ class Sentence
   
   # returns an array of sentences terminated by ".", "?", or "!"
   def self.get_sentences(str)
+    if str.nil? || str=="" 
+      return []
+    end
     str = Sentence.strip(str)   
     str = Sentence.remove_newlines(str)
     str = Sentence.terminate_with_period(str)

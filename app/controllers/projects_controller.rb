@@ -10,7 +10,7 @@ class ProjectsController < ApplicationController
   def index_basecamp
     @projects = Project.where("basecamp_id IS NOT NULL")
   end
-    
+
   def new
     @project = Project.new
   end
@@ -41,11 +41,28 @@ class ProjectsController < ApplicationController
   
   def show
     @project = Project.find(params[:id])
-    @num_messages = Message.get_count(@project)
-    @num_comments = Comment.get_count(@project)
-    @num_tasks = Task.get_count(@project)
+    @num_messages = @project.messages.count
+    @num_bc_messages = Message.get_bc_count(@project)
+    @num_message_comments = @project.message_comments.count
+    @num_task_comments = @project.task_comments.count
+    @num_bc_comments = 99#Comment.get_bc_count(@project)
+    @num_tasks = @project.tasks.count
+    @num_bc_tasks = Task.get_bc_count(@project)
+
   end
 
+  def get_available_messages
+    project = Project.find(params[:id])
+    Message.get_bc_count(project, true)
+    redirect_to project_path(project)
+  end
+
+  def get_available_tasks
+    project = Project.find(params[:id])
+    Task.get_bc_count(project, true)
+    redirect_to project_path(project)
+  end
+  
   def import_all
     if !Project.import_all_from_basecamp
       redirect_to root_path, :error => "Error importing all projects"

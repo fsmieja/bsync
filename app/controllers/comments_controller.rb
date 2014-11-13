@@ -29,21 +29,70 @@ class CommentsController < ApplicationController
     @per_page = params[:per_page] ||  20
     @project = Project.find(params[:id])
     order_str = sort_column + " "  + sort_direction
+#    @comments = []
     @comments = Comment.joins( "LEFT JOIN `messages` ON `messages`.`id` = `comments`.`message_id` LEFT JOIN `tasks` ON `tasks`.`id` = `comments`.`task_id`")
                        .where([ "messages.project_id = #{params[:id]} or tasks.project_id = #{params[:id]}" ]).order(order_str).page(params[:page]).per_page(@per_page)      
+#    @comments << (@project.message_comments+@project.task_comments).order(order_str).page(params[:page]).per_page(@per_page)      
+    #@comments << @project.task_comments#.order(order_str).page(params[:page]).per_page(@per_page)      
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @comments }
+    end
+  end
+  
+  def index_message_comments
+    @per_page = params[:per_page] ||  20
+    @project = Project.find(params[:id])
+    order_str = sort_column + " "  + sort_direction
+    @comments = Comment.joins( "LEFT JOIN `messages` ON `messages`.`id` = `comments`.`message_id`")
+                       .where([ "messages.project_id = #{params[:id]}"]).order(order_str).page(params[:page]).per_page(@per_page)      
+#    @comments << (@project.message_comments+@project.task_comments).order(order_str).page(params[:page]).per_page(@per_page)      
+    #@comments << @project.task_comments#.order(order_str).page(params[:page]).per_page(@per_page)      
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @comments }
+    end
+  end
+  
+  def index_task_comments
+    @per_page = params[:per_page] ||  20
+    @project = Project.find(params[:id])
+    order_str = sort_column + " "  + sort_direction
+    @comments = Comment.joins( "LEFT JOIN `tasks` ON `tasks`.`id` = `comments`.`task_id`")
+                       .where([ "tasks.project_id = #{params[:id]}"]).order(order_str).page(params[:page]).per_page(@per_page)      
+#    @comments << (@project.message_comments+@project.task_comments).order(order_str).page(params[:page]).per_page(@per_page)      
+    #@comments << @project.task_comments#.order(order_str).page(params[:page]).per_page(@per_page)      
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @comments }
     end
   end
 
+  def index
+    @per_page = params[:per_page] ||  20
+    @project = Project.find(params[:id])
+    
+    @comments = @project.comments 
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @comments }
+    end
+
+  end
+  
   def show
     @comment = Comment.find(params[:id])
     @message = @comment.message
+    @task = @comment.task
     @actions = get_actions(@comment.content)
     @events = get_events(@comment.content)
     @tags    = @comment.tags
-    @all_tags = (@comment.project.message_tags + @comment.project.comment_tags).uniq
+    @all_tags = ""
+    if @message || @task
+      project = @message ? @message.project : @task.project 
+      @all_tags = (project.message_comment_tags + project.task_comment_tags).uniq
+    end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -73,6 +122,22 @@ class CommentsController < ApplicationController
     comment.destroy
   end
     
+  def destroy_message_comments
+    project = Project.find(params[:id])
+    project.message_comments.each do |c| 
+      c.destroy
+    end
+    redirect_to project_path(params[:id]), :notice => "Deleted message comments"     
+  end
+
+  def destroy_task_comments
+    project = Project.find(params[:id])
+    project.task_comments.each do |c| 
+      c.destroy
+    end
+    redirect_to project_path(params[:id]), :notice => "Deleted task comments"     
+  end
+  
   def add_comment
     @message = Message.find(params[:id])
     @comment = @message.comments.build(params[:comment])
@@ -137,14 +202,50 @@ class CommentsController < ApplicationController
   
   def import_all_for_project
     project = Project.find(params[:id])
-    if !import_all_message_comments_for_project(params[:id])
-      flash[:error] =  "There was a problem importing the comments from messages"
-    elsif !import_all_task_comments_for_project(params[:id])
-      flash[:error] =  "There was a problem importing the comments from tasks"
+    if !import_all_for_project(params[:id])
+      flash[:error] =  "There was a problem importing the comments"
     else
       flash[:success] =  "Comments imported successfully"
     end
     redirect_to project_comments_path(project.id)
+  end
+
+  def import_message_comments
+    project = Project.find(params[:id])
+    if !project.messages.nil?
+      err = false
+      project.messages.each do |m|
+        if err || !Comment.import_all_from_basecamp_message(m)
+          flash[:error] = "Problem importing comments for message id #{m.id}"
+          err = true
+        else
+          flash[:success] = "Successfully imported message comments"
+        end
+        sleep 1
+      end
+    else
+      flash[:error] = "No message comments to import"
+    end
+    redirect_to project_path(params[:id])
+  end
+
+  def import_task_comments
+    project = Project.find(params[:id])
+    if !project.tasks.nil?
+      err = false
+      project.tasks.each do |t|
+        if err || !Comment.import_all_from_basecamp_task(t)
+          flash[:error] = "Problem importing comments for task id #{m.id}"
+          err = true
+        else
+          flash[:success] = "Successfully imported task comments"
+        end
+        sleep 1
+      end
+    else
+      flash[:error] = "No task omments to import"
+    end
+    redirect_to project_path(params[:id])
   end
 
   def import_all_for_message
@@ -188,24 +289,10 @@ class CommentsController < ApplicationController
   
   private
   
-  def import_all_message_comments_for_project(project_id)
-    messages = Message.find_all_by_project_id(project_id)
-    messages.each do |m|
-      if !Comment.import_all_from_basecamp_message(m)
-        return false
-      end
-    end
-    true
-  end
-
-  def import_all_task_comments_for_project(project_id)
-    tasks = Task.find_all_by_project_id(project_id)
-    tasks.each do |t|
-      if !Comment.import_all_from_basecamp_task(t)
-        return false
-      end
-    end
-    true
+  
+  # imports only comments for already imported messages and tasks
+  def import_all_for_project(project_id)
+    Comment.import_all_for_project(project_id)
   end
 
   # def copy_comment_from_basecamp basecamp_comment, com_list=nil

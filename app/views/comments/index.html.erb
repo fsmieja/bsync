@@ -1,0 +1,27 @@
+
+<h1>
+	All Comments for Project '<%= @project.name%>'
+</h1>
+<%= will_paginate @comments, :class => 'flickr_pagination' %>
+<table class="url-list sortable">
+  <tr>
+  <% if @project.basecamp_id %>
+    <th>Author</th>
+    <th>Content</th>
+    <th>Message/Task</th>
+    <th><%= sortable('num_attachments','Attachments') %></th>
+    <th><%= sortable('posted_on', 'Posted') %></th>
+    <th></th>
+  <% else %>
+    <th>Content</th>
+    <th><%= sortable('num_attachments','Attachments') %></th>
+    <th><%= sortable('created_at', 'Created') %></th>
+    <th></th>
+  <% end %>
+  </tr>
+<%= render @comments %>
+
+</table>
+
+<%= link_to "Project", project_path(@project)%>
+

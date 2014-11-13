@@ -1,0 +1,1 @@
+ActiveResource::Base.headers["User-Agent"] = "Integration with kaboom - in dev- (frank.smieja@smartatech.com)"

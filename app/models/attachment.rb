@@ -5,12 +5,13 @@ class Attachment < ActiveRecord::Base
   
 
 
-  def copy_fields_from_basecamp(basecamp_attachment)  
-    self.basecamp_id = basecamp_attachment.content["id"]
-    self.basecamp_url = basecamp_attachment.content["download_url"]
-    self.author = basecamp_attachment.content["author"]
-    self.name = basecamp_attachment.content["name"]
-    self.attachment_type = basecamp_attachment.content["type"]
-    self.filename = basecamp_attachment.filename
+  def copy_fields_from_basecamp(basecamp_attachment)
+    att_hash = basecamp_attachment.filename
+    #self.basecamp_id = att_hash["id"]
+    self.basecamp_url = att_hash["download_url"]
+    self.author = att_hash["author_name"]
+    self.name = att_hash["name"]
+    self.attachment_type = att_hash["type"]
+    self.filename = att_hash["name"]
   end
 end

@@ -3,8 +3,10 @@ class Project < ActiveRecord::Base
   has_many :messages, :dependent => :destroy
   has_many :tasks, :dependent => :destroy
   has_many :message_tags, :through => :messages, :source => :tags
-  has_many :comments, :through => :messages
-  has_many :comment_tags, :through => :comments, :source => :tags
+  has_many :message_comments, :through => :messages, :source => :comments
+  has_many :task_comments, :through => :tasks, :source => :comments
+  has_many :message_comment_tags, :through => :message_comments, :source => :tags
+  has_many :task_comment_tags, :through => :task_comments, :source => :tags
   
   def self.import_all_from_basecamp
     destroy_all(:condition => [ "basecamp_id NOT NULL" ])

@@ -40,13 +40,28 @@
 <% end %>
 <p>
   <b>Messages:</b>
-  <%= link_to(@num_messages, project_messages_path(@project.id)) %> 
+  <%= link_to(@num_messages, project_messages_path(@project.id)) %> (<%= @num_bc_messages %> available - <%= link_to "Refresh", refresh_available_messages_path(@project) %>) |
+  <%= link_to("Import all", import_messages_path(@project.id))%> |
+  <%= link_to("Import new", discover_messages_path(@project.id))%> |
+  <%= link_to("Remove all", project_delete_messages_path(@project.id))%>
 </p>
 <p>
-  <b>Comments:</b>
-  <%= link_to(@num_comments, project_comments_path(@project.id)) %> 
-</p>
+  <b>Message Comments:</b>
+  <%= link_to(@num_message_comments, project_message_comments_path(@project.id)) %> 
+  <%= link_to("Import all", import_message_comments_path(@project.id))%> |
+  <%= link_to("Import new", discover_message_comments_path(@project.id))%> |
+  <%= link_to("Remove all", project_delete_message_comments_path(@project.id))%>
+</p>  
   <b>Tasks:</b>
-  <%= link_to(@num_tasks, project_tasks_path(@project.id)) %> 
+  <%= link_to(@num_tasks, project_tasks_path(@project.id)) %> (<%= @num_bc_tasks %> available - <%= link_to "Refresh", refresh_available_tasks_path(@project) %>) |
+  <%= link_to("Import all", import_tasks_path(@project.id))%> |
+  <%= link_to("Import new", discover_tasks_path(@project.id))%> |
+  <%= link_to("Remove all", project_delete_tasks_path(@project.id))%>
+</p>
+<p>
+  <b>Task Comments:</b>  
+  <%= link_to(@num_task_comments, project_task_comments_path(@project.id)) %> 
+  <%= link_to("Import all", import_task_comments_path(@project.id))%>   |
+  <%= link_to("Remove all", project_delete_task_comments_path(@project.id))%>
 </p>
 <%= link_to 'All Projects', projects_path %>

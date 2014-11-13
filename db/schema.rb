@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130524161812) do
+ActiveRecord::Schema.define(:version => 20141113144357) do
 
   create_table "attachments", :force => true do |t|
     t.integer  "basecamp_id"
@@ -91,6 +91,10 @@ ActiveRecord::Schema.define(:version => 20130524161812) do
     t.integer  "basecamp_id"
     t.text     "announcement"
     t.text     "description"
+    t.integer  "available_messages",         :default => 0
+    t.integer  "available_tasks",            :default => 0
+    t.integer  "available_message_comments", :default => 0
+    t.integer  "available_task_comments",    :default => 0
   end
 
   create_table "tags", :force => true do |t|
@@ -112,6 +116,7 @@ ActiveRecord::Schema.define(:version => 20130524161812) do
     t.integer  "num_comments"
     t.integer  "basecamp_id"
     t.string   "creator"
+    t.boolean  "complete",     :default => false
   end
 
   create_table "words", :force => true do |t|

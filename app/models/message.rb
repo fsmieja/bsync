@@ -9,18 +9,32 @@ class Message < ActiveRecord::Base
 
   
   def self.get_count(proj)
-    messages = find_all_by_project_id(proj.id)
-    if proj.basecamp_id and messages.empty?  # not been imported yet
-      messages = Basecamp::Message.find(:all, :params => { :project_id => proj.basecamp_id }, :from => :archive)
-    elsif proj.basecamp_id
-      return 0
-    end
-    messages.count
+    proj.messages.count
   end  
   
-  def self.import_all_from_basecamp_project project
+  def self.get_bc_count(proj, from_bc = false)
+    num = 0
+    if proj.basecamp_id   
+      if from_bc
+        messages = get_all_bc_messages_in_project(proj)
+        num = messages.count
+        proj.available_messages = num
+        proj.save!
+      else
+        num = proj.available_messages
+      end
+    end
+    num
+  end
+  
+  def self.get_all_bc_messages_in_project(proj)
+    #Basecamp::Message.find(:all, :params => { :project_id => proj.basecamp_id }, :from => :archive)
+    Basecamp::Message.archive(proj.basecamp_id)
+  end
+  
+  def self.import_all_from_basecamp_project(project)
     Message.destroy_all(:project_id => project.id)
-    bc_list = Basecamp::Message.find(:all, :params => { :project_id => project.basecamp_id}, :from => :archive)
+    bc_list = get_all_bc_messages_in_project(project)
     bc_list.each do |bcm|
       msg = Basecamp::Message.find(bcm.id)
       message = project.messages.build
@@ -28,20 +42,29 @@ class Message < ActiveRecord::Base
       if !message.save!
         return false
       end
-    end
+      sleep 1
+     end
     true
   end
     
+  def self.destroy_project_messages(project)
+     Message.destroy_all(:project_id => project.id)
+  end
+  
   def self.discover_new_from_basecamp(project)
-    bc_list = Basecamp::Message.find(:all, :params => { :project_id => project.basecamp_id}, :from => :archive)
-    bc_list.each do |bcm|
+   # bc_list = Basecamp::Message.find(:all, :params => { :project_id => project.basecamp_id}, :from => :archive)
+   bc_list = get_all_bc_messages_in_project(project)
+   bc_list.each do |bcm|
       if !find_by_basecamp_id(bcm.id)
         msg = project.messages.build
-        m = Basecamp::Message.find(bcm.id)
+        m=Basecamp::Message.find(bcm.id)
         msg.copy_fields_from_basecamp(m)
         if !msg.save!
           return false
         end
+        sleep 1
+        #Comment.discover_new_from_basecamp_message(bcm.id)
+       
       end 
     end
     true
@@ -71,7 +94,7 @@ class Message < ActiveRecord::Base
         return false
       end
     end
-    self.num_attachments = self.attachments.count
+    self.num_attachments = basecamp_attachments.count
     return true
   end  
   

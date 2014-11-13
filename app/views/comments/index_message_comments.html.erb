@@ -1,6 +1,6 @@
 
 <h1>
-	All Comments for Project '<%= @project.name %>'
+	All Message Comments for Project '<%= @project.name %>'
 </h1>
 <%= will_paginate @comments, :class => 'flickr_pagination' %>
 <table class="url-list sortable">
@@ -13,10 +13,7 @@
     <th></th>
   </tr>
 <%= render @comments %>
-
 </table>
-<%=  button_to "(Re-)Import All", import_project_comments_path(@project), :confirm => "Warning: all existing comments for this project will be deleted first!", :class => 'inline' %>
-<%=  button_to "Discover New", discover_comments_path(@project)  %>
 
 <%= link_to "All Messages", project_messages_path(@project)%> |
 <%= link_to "All Tasks", project_tasks_path(@project)%> |

@@ -9,8 +9,13 @@ events_text = ""
 end 
 %>
 <p>
+	<% if !@comment.message.nil?%>
   <b>Message Title:</b>
   <%= @comment.message.title %>
+  <% elsif !@comment.task.nil?%>
+  <b>Task id:</b>
+  <%= @comment.task.id %>
+  <% end %>
 </p>
 <% if @comment.basecamp_id %>
 <p>

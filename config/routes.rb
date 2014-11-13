@@ -10,6 +10,8 @@ Basecamp::Application.routes.draw do
  match 'message/:id/comments', :to => 'comments#index_message', :as => "message_comments"
  match 'message/:id/new', :to => 'messages#new', :as => "new_project_message"
  match 'project/:id/comments', :to => 'comments#index_project', :as => "project_comments"
+ match 'project/:id/message_comments', :to => 'comments#index_message_comments', :as => "project_message_comments"
+ match 'project/:id/task_comments', :to => 'comments#index_task_comments', :as => "project_task_comments"
  match 'task/:id/comments',    :to => 'comments#index_task', :as => "task_comments"
  match 'project/:id/messages', :to => 'messages#index', :as => "project_messages"
  match 'project/:id/tasks',    :to => 'tasks#index', :as => "project_tasks"
@@ -27,12 +29,19 @@ Basecamp::Application.routes.draw do
  match 'task/:id/reimport', :to => 'tasks#reimport', :as => "reimport_task"
  match 'tasks/:id/import', :to => 'tasks#import_all', :as => "import_tasks"
  match 'tasks/:id/discover', :to => 'tasks#discover', :as => "discover_tasks"
+ match 'tasks/:id/destroy', :to => 'tasks#destroy', :as => "project_delete_tasks"
 
- match 'comment/:id/import_for_message', :to => 'comments#import_all_for_message', :as => "import_message_comments"
+ match 'comment/:id/import_for_message', :to => 'comments#import_for_message', :as => "import_comments_for_message"
  match 'comment/:id/reimport', :to => 'comments#reimport', :as => "reimport_comment"
  match 'comments/:id/import', :to => 'comments#import_all', :as => "import_comments"
+ match 'comments/:id/discover', :to => 'comments#discover', :as => "discover_comments"
  match 'comments/:id/tag', :to => 'comments#tag'
  match 'comment/:id/remove_tag', :to => 'comments#remove_tag', :as => "remove_comment_tag"
+ match 'comments/:id/destroy_message_comments', :to => 'comments#destroy_message_comments', :as => "project_delete_message_comments"
+ match 'comments/:id/destroy_task_comments', :to => 'comments#destroy_task_comments', :as => "project_delete_task_comments"
+ match 'comment/:id/import_message_comments', :to => 'comments#import_message_comments', :as => "import_message_comments"
+ match 'comment/:id/import_task_comments', :to => 'comments#import_task_comments', :as => "import_task_comments"
+ match 'comment/:id/discover_message_comments', :to => 'comments#discover_message_comments', :as => "discover_message_comments"
 
  match 'message/:id/import', :to => 'messages#import', :as => "import_message"
  match 'message/:id/reimport', :to => 'messages#reimport', :as => "reimport_message"
@@ -41,13 +50,19 @@ Basecamp::Application.routes.draw do
  match 'messages/:id/discover', :to => 'messages#discover', :as => "discover_messages"
  match 'messages/:id/tag', :to => 'messages#tag'
  match 'message/:id/remove_tag', :to => 'messages#remove_tag', :as => "remove_message_tag"
+ match 'messages/:id/destroy', :to => 'messages#destroy', :as => "project_delete_messages"
  
  
- match 'project/:id/import_comments', :to => 'comments#import_all_for_project', :as => "import_project_comments"
+ match 'project/:id/import_message_comments', :to => 'comments#import_message_comments', :as => "import_project_message_comments"
+ match 'project/:id/discover_message_comments', :to => 'comments#discover_message_comments', :as => "discover_project_message_comments"
+ match 'project/:id/import_task_comments', :to => 'comments#import_task_comments', :as => "import_project_task_comments"
+ match 'project/:id/discover_task_comments', :to => 'comments#discover_task_comments', :as => "discover_project_task_comments"
  match 'project/:id/import', :to => 'projects#import', :as => "import_project"
  match 'project/:id/reimport', :to => 'projects#reimport', :as => "reimport_project"
  match 'projects/import', :to => 'projects#import_all', :as => "import_projects"
  match 'projects/discover', :to => 'projects#discover', :as => "discover_projects"
+ match 'project/:id/refresh_available_messages', :to => 'projects#get_available_messages', :as => "refresh_available_messages"
+ match 'project/:id/refresh_available_tasks', :to => 'projects#get_available_tasks', :as => "refresh_available_tasks"
  
 
   # The priority is based upon order of creation:

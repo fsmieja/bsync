@@ -32,6 +32,9 @@ module ApplicationHelper
   
   def get_events(msg)
     sentences = Sentence.get_sentences(msg)
+    if sentences.nil?
+      return []
+    end
     events = []
     event_words = Word.find_all_by_word_type('event')
     sentences.each do |s|
