@@ -1,0 +1,12 @@
+  <tr>
+<% if event.basecamp_id %>
+    <td ><%= event.id.nil? ? event.title : link_to(event.title, event_path(event)) %></td>
+    <td style="width: 150px"><%= event.start_at.to_formatted_s(:short) %></td>
+    <td style="width: 150px"><%= event.created_at.to_formatted_s(:short) %></td>
+    <td><%= event.id.nil? ? link_to('Import', import_event_path(event)) : link_to('Re-Import', reimport_event_path(event)) %></td>
+<% else %>
+    <td><%= link_to(event.title, event_path(event)) %></td>
+    <td style="width: 150px"><%= event.created_at.to_formatted_s(:long) %></td>
+    <td style="width: 150px"><%= event.updated_at.to_formatted_s(:long) %></td>
+<% end %>
+  </tr>

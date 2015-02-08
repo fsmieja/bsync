@@ -64,4 +64,11 @@
   <%= link_to("Import all", import_task_comments_path(@project.id))%>   |
   <%= link_to("Remove all", project_delete_task_comments_path(@project.id))%>
 </p>
+<p>
+  <b>Events:</b>
+  <%= link_to(@num_events, project_events_path(@project.id)) %> (<%= @num_bc_events %> available - <%= link_to "Refresh", refresh_available_events_path(@project) %>) |
+  <%= link_to("Import all", import_events_path(@project.id))%> |
+  <%= link_to("Import new", discover_events_path(@project.id))%> |
+  <%= link_to("Remove all", project_delete_events_path(@project.id))%>
+</p>
 <%= link_to 'All Projects', projects_path %>

@@ -1,0 +1,39 @@
+
+<table>
+
+<tr>
+	<td><b>Title:</b></td>
+	<td><%= @event.title %></td>
+</tr>
+
+<% if @event.basecamp_id %>
+<tr>
+	<td><b>Creator:</b></td>
+  	<td><%= @event.creator %></td>
+</tr>
+<tr>
+	<td><b>Created:</b></td>
+  	<td><%= @event.created_on %></td>
+</tr>
+<% else %>
+<tr>
+	<td><b>Created:</b></td>
+  	<td><%= @event.created_at %></td>
+</tr>
+<% end %>
+<tr>
+	<td><b>Event date:</b></td>
+  	<td><%= @event.start_at %></td>
+</tr>
+<% if @event.basecamp_id %>
+<tr>
+	<td><b>Basecamp ID:</b></td>
+  	<td><%= @event.basecamp_id %></td>
+</tr>
+<% end %>
+</table>
+</p>
+
+
+
+<%= link_to 'All Events', project_events_path(@event.project_id) %>

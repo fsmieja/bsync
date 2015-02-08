@@ -1,0 +1,33 @@
+<h1>Events for Project '<%=@project.name%>'</h1>
+
+
+<%= will_paginate @events, :class => 'flickr_pagination' %>
+
+<table class="cloud-and-table">
+	<tr>
+   			<th id="list-header">Title</th>
+			<th><%= sortable("start_at", "Date") %> </th>
+    			<% if @project.basecamp_id %>
+    				<th><%= sortable("created_on", "Created") %> </th>
+    			<% else %>
+      				<th><%= sortable("created_at", "Created") %> </th>
+      				<th><%= sortable("updated_at", "Updated") %> </th>
+				<% end %>
+    			<th></th>
+  			</tr>
+				<%= render @events %>
+			</table>
+		</td>	
+	</tr>
+</table>
+<% if @project.basecamp_id %>
+<%=  button_to "(Re-)Import All", import_messages_path(@project), :confirm =>"Are you sure?  All events for this project will be deleted first...", :class => 'inline' %>
+<%=  button_to "Discover new", discover_events_path(@project)%>
+<%= link_to "Project", project_path(@project)%> |
+<%= link_to "All Projects", basecamp_projects_path %> 
+<% else %>
+<%= button_to "Create Event", new_project_event_path(@project.id), :method => 'get' %>
+<%= link_to "Project", project_path(@project)%> |
+<%= link_to "All Projects", projects_path %> 
+<% end %>
+

@@ -1,0 +1,9 @@
+<%= form_for @auth do |f| %>
+
+	<%= f.label 'Domain' %>	
+	<%= f.text_field :domain %><br/>
+	<%= f.label 'Token' %>	
+	<%= f.text_field :token %><br/>
+	<%= f.submit %>
+	
+<% end %>

@@ -1,0 +1,10 @@
+<%= form_for @event do |f| %>
+
+	<%= f.label 'Title' %>	
+	<%= f.text_field :title %><br/>
+	<%= f.label 'Date' %>	
+	<%= f.datetime :start_at %><br/>
+	<%= f.submit %>
+<%= hidden_field_tag "id", @project.id %>
+	
+<% end %>

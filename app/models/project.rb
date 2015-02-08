@@ -1,6 +1,7 @@
 class Project < ActiveRecord::Base
   
   has_many :messages, :dependent => :destroy
+  has_many :events, :dependent => :destroy
   has_many :tasks, :dependent => :destroy
   has_many :message_tags, :through => :messages, :source => :tags
   has_many :message_comments, :through => :messages, :source => :comments

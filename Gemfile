@@ -8,7 +8,7 @@ gem 'mysql2', '< 0.3.11'
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
 #gem 'sqlite3'
-gem "rake" #, "0.8.7"
+gem "rake" , "10.1.1"#"0.8.7"
 
 gem 'basecamp', '0.0.9'
 

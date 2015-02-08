@@ -5,6 +5,7 @@ class ProjectsController < ApplicationController
   
   def index
     @projects = Project.where("basecamp_id IS NULL")
+    @auths = Auth.all
   end
   
   def index_basecamp
@@ -42,7 +43,9 @@ class ProjectsController < ApplicationController
   def show
     @project = Project.find(params[:id])
     @num_messages = @project.messages.count
+    @num_events = @project.events.count
     @num_bc_messages = Message.get_bc_count(@project)
+    @num_bc_events = Event.get_bc_count(@project)
     @num_message_comments = @project.message_comments.count
     @num_task_comments = @project.task_comments.count
     @num_bc_comments = 99#Comment.get_bc_count(@project)
@@ -54,6 +57,12 @@ class ProjectsController < ApplicationController
   def get_available_messages
     project = Project.find(params[:id])
     Message.get_bc_count(project, true)
+    redirect_to project_path(project)
+  end
+
+  def get_available_events
+    project = Project.find(params[:id])
+    Event.get_bc_count(project, true)
     redirect_to project_path(project)
   end
 

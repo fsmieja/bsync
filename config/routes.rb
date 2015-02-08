@@ -1,5 +1,9 @@
 Basecamp::Application.routes.draw do
 
+  get "events/index"
+
+  get "events/show"
+
  root :to => 'projects#index'
 
   resources :tags do
@@ -14,6 +18,7 @@ Basecamp::Application.routes.draw do
  match 'project/:id/task_comments', :to => 'comments#index_task_comments', :as => "project_task_comments"
  match 'task/:id/comments',    :to => 'comments#index_task', :as => "task_comments"
  match 'project/:id/messages', :to => 'messages#index', :as => "project_messages"
+ match 'project/:id/events', :to => 'events#index', :as => "project_events"
  match 'project/:id/tasks',    :to => 'tasks#index', :as => "project_tasks"
  match 'projects/basecamp', :to => 'projects#index_basecamp', :as => "basecamp_projects"
  match 'message/:id/add_comment', :to => 'comments#add_comment', :as => "add_message_comment"
@@ -24,6 +29,8 @@ Basecamp::Application.routes.draw do
  resources :projects
  resources :words
  resources :tags
+ resources :events
+ resources :auths
 
  match 'task/:id/import', :to => 'tasks#import', :as => "import_task"
  match 'task/:id/reimport', :to => 'tasks#reimport', :as => "reimport_task"
@@ -52,7 +59,13 @@ Basecamp::Application.routes.draw do
  match 'message/:id/remove_tag', :to => 'messages#remove_tag', :as => "remove_message_tag"
  match 'messages/:id/destroy', :to => 'messages#destroy', :as => "project_delete_messages"
  
- 
+ match 'event/:id/import', :to => 'events#import', :as => "import_event"
+ match 'event/:id/reimport', :to => 'events#reimport', :as => "reimport_event"
+ match 'event/:id/import_all', :to => 'events#import_all', :as => "import_events"
+ match 'event/:id/reimport', :to => 'events#reimport_all', :as => "reimport_events"
+ match 'event/:id/discover', :to => 'events#discover', :as => "discover_events"
+ match 'events/:id/destroy', :to => 'events#destroy', :as => "project_delete_events"
+
  match 'project/:id/import_message_comments', :to => 'comments#import_message_comments', :as => "import_project_message_comments"
  match 'project/:id/discover_message_comments', :to => 'comments#discover_message_comments', :as => "discover_project_message_comments"
  match 'project/:id/import_task_comments', :to => 'comments#import_task_comments', :as => "import_project_task_comments"
@@ -62,6 +75,7 @@ Basecamp::Application.routes.draw do
  match 'projects/import', :to => 'projects#import_all', :as => "import_projects"
  match 'projects/discover', :to => 'projects#discover', :as => "discover_projects"
  match 'project/:id/refresh_available_messages', :to => 'projects#get_available_messages', :as => "refresh_available_messages"
+ match 'project/:id/refresh_available_events', :to => 'projects#get_available_events', :as => "refresh_available_events"
  match 'project/:id/refresh_available_tasks', :to => 'projects#get_available_tasks', :as => "refresh_available_tasks"
  
 
