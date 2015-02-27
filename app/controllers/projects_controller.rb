@@ -1,15 +1,13 @@
 class ProjectsController < ApplicationController
   
   include ApplicationHelper
-  before_filter :authenticate_api
+  before_filter :authenticate_api, :only => [:index_basecamp, :discover]
+  before_filter :start_session
   
   def index
     @projects = Project.where("basecamp_id IS NULL")
-    @auths = Auth.all
-  end
-  
-  def index_basecamp
-    @projects = Project.where("basecamp_id IS NOT NULL")
+    @bc_projects = Project.where("basecamp_id IS NOT NULL")
+    #@auths = Auth.all
   end
 
   def new
@@ -54,6 +52,16 @@ class ProjectsController < ApplicationController
 
   end
 
+  def disconnect
+    project = Project.find_by_basecamp_id(params[:id])
+    project.disconnect_project
+    if project.save!
+      flash[:success] = "Disconnected project from basecamp"
+    end
+    redirect_to projects_path
+    
+  end
+  
   def get_available_messages
     project = Project.find(params[:id])
     Message.get_bc_count(project, true)
@@ -80,12 +88,13 @@ class ProjectsController < ApplicationController
   end  
 
   def discover
-    startnum = Project.all.count
-    if !Project.discover_new_from_basecamp
+    #startnum = Project.all.count
+    num_new = Project.discover_new_from_basecamp
+    if num_new<0
       redirect_to root_path, :error => "Error importing new projects"
     end
-    additional_num = Project.all.count-startnum
-    redirect_to root_path, :notice => additional_num > 0 ? "Successfully imported #{additional_num} new projects" : "No new projects to import"
+    #additional_num = Project.all.count-startnum
+    redirect_to root_path, :notice => num_new > 0 ? "Successfully imported #{num_new} new projects" : "No new projects to import"
   end  
   
   def import

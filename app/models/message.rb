@@ -69,6 +69,8 @@ class Message < ActiveRecord::Base
     end
     true
   end
+
+
       
   def copy_fields_from_basecamp(basecamp_message, summary=false)
     self.title = basecamp_message.title

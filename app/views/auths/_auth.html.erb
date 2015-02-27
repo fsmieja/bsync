@@ -1,6 +1,6 @@
   <tr>
-   <td >auth.domain : link_to(auth.domain, auth_path(auth)) %></td>
-    <td>auth.token</td>
+   <td ><%= link_to(auth.domain, edit_auth_path(auth)) %></td>
+    <td><%= auth.token %></td>
     <td style="width: 150px"><%= auth.created_at.to_formatted_s(:long) %></td>
     <td style="width: 150px"><%= auth.updated_at.to_formatted_s(:long) %></td>
   </tr>

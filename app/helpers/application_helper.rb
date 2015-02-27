@@ -4,8 +4,17 @@ module ApplicationHelper
     image_tag("rails.png", :alt => "Logo", :class => "logo")#,  :size => "246x82")
   end
 
-  def authenticate_api(domain, token)
-    Basecamp.establish_connection!(domain, token, 'X', true)
+  def authenticate_api
+    if !cookies.signed[:remember_auth].nil?
+      @selected_auth = cookies.signed[:remember_auth][0] || nil
+    end
+    if @selected_auth.nil?
+      puts "selected null"
+      @selected_auth=Auth.all.first.id
+    end
+    auth = Auth.find_by_id(@selected_auth)
+    puts "selected = #{@selected_auth}"
+    Basecamp.establish_connection!(auth.domain, auth.token, 'X', true)
   end
 
 #  'schoolscloud.basecamphq.com'
@@ -16,6 +25,13 @@ module ApplicationHelper
     css_class = column == sort_column ? "current #{sort_direction}" : nil
     direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
     link_to title, {:sort => column, :direction => direction, :per_page => params[:per_page]}, {:class => css_class}
+  end
+  
+  def start_session
+    if !@session
+      @auths = Auth.all
+      @session = true
+    end
   end
   
   def get_actions(msg)

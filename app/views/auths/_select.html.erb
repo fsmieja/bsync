@@ -1,0 +1,11 @@
+<table>
+	<tr width="100%">
+		<td></td>
+		<td width="50%" align="right>">
+<%= form_for(:auth, :url => {:controller => 'auths', :action => 'select'})  do |f| %>
+<%= f.collection_select(:id, Auth.all,:id,:domain, {:selected => 2}, {:class => "dropdown"}) %>
+    <%= f.submit "Select Domain" %>
+    </td>
+    </tr>
+    </table>
+<% end %>

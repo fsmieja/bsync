@@ -26,16 +26,18 @@ class Project < ActiveRecord::Base
   
   def self.discover_new_from_basecamp
     ps = Basecamp::Project.find(:all)
+    num_new=0
     ps.each do |p|
       if !find_by_basecamp_id(p.id)
         proj = new
+        num_new+=1
         proj.copy_fields_from_basecamp(p)
         if !proj.save!
-          return false
+          return -1
         end
       end 
     end
-    true
+    num_new
   end
   
   def copy_fields_from_basecamp basecamp_project
@@ -48,4 +50,7 @@ class Project < ActiveRecord::Base
     self.announcement = basecamp_project.announcement
   end  
   
+  def disconnect_project
+    self.basecamp_id = nil    
+  end
 end

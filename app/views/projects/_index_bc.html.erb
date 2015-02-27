@@ -1,4 +1,4 @@
-<h2>Projects</h2>
+<h2>Basecamp Projects</h2>
 <table class="url-list sortable">
 	<tr>
 		<th>Name</th>
@@ -7,10 +7,10 @@
 		<th>Status</th>
 		<th>Company</th>
 		<th></th>
+		<th></th>
 	</tr>
-<%= render @projects %>
+<%= render projects %>
 </table>
 <%= button_to '(Re-)Import All from basecamp', import_projects_path, :class => "inline", :confirm => "Are you sure?  All project data will be deleted first..." %>
 <%= button_to 'Load new projects from basecamp', discover_projects_path, :class => "inline" %>
-<%= button_to 'Create new project', new_project_path,  :method => 'get'%>
 

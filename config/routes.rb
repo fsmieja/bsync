@@ -22,6 +22,7 @@ Basecamp::Application.routes.draw do
  match 'project/:id/tasks',    :to => 'tasks#index', :as => "project_tasks"
  match 'projects/basecamp', :to => 'projects#index_basecamp', :as => "basecamp_projects"
  match 'message/:id/add_comment', :to => 'comments#add_comment', :as => "add_message_comment"
+ match 'project/:id/disconnect',    :to => 'projects#disconnect', :as => "disconnect_project"
 
  resources :comments
  resources :messages
@@ -32,6 +33,7 @@ Basecamp::Application.routes.draw do
  resources :events
  resources :auths
 
+ match 'auths/select', :to => 'auths#select'
  match 'task/:id/import', :to => 'tasks#import', :as => "import_task"
  match 'task/:id/reimport', :to => 'tasks#reimport', :as => "reimport_task"
  match 'tasks/:id/import', :to => 'tasks#import_all', :as => "import_tasks"

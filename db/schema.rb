@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150208120158) do
+ActiveRecord::Schema.define(:version => 20150208200239) do
 
   create_table "attachments", :force => true do |t|
     t.integer  "basecamp_id"
@@ -22,6 +22,13 @@ ActiveRecord::Schema.define(:version => 20150208120158) do
     t.string   "attachment_type"
     t.integer  "comment_id"
     t.integer  "message_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "auths", :force => true do |t|
+    t.string   "token"
+    t.string   "domain"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

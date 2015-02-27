@@ -12,6 +12,14 @@ class AuthsController < ApplicationController
     @auth = Auth.new
   end
   
+  def select
+    if params[:auth] && params[:auth][:id]
+      @selected_auth = params[:auth][:id]
+      cookies.permanent.signed[:remember_auth] = [@selected_auth]
+    end
+     redirect_to projects_path        
+  end
+  
   def create
     @auth = Auth.new(params[:auth])
     if !@auth.save!
