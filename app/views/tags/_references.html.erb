@@ -4,12 +4,14 @@
 		<th>Project</th>
 		<th>Number of times</th>
 	</tr>	
-	<% projects.each do |p| %>
+	<% puts projects.count
+		projects.each do |p| %>
 	<tr>
 		<td><%= p.name %></td>
 		<td><%= project_numbers[:project_id => p.id] %></td>
 	</tr>
-	<% end %>
+	<% end 
+	%>
 </table>
 
 <% if messages.any? %>

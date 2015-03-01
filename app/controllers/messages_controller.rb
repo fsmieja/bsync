@@ -89,7 +89,7 @@ class MessagesController < ApplicationController
     if @message.content.nil?
       @message.content = ""
     end
-    if @message.basecamp_id
+    if @message.basecamp_id && !@message.comments
       comments = Basecamp::Comment.find(:all, :params => { :post_id => @message.basecamp_id })
     else
       comments = @message.comments

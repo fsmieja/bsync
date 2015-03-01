@@ -1,11 +1,11 @@
 class Comment < ActiveRecord::Base
   belongs_to :message
-  belongs_to :task
+  #belongs_to :task
   has_many :attachments, :dependent => :destroy
   has_many :comment_taggings
   has_many :tags, :through => :comment_taggings
   has_one :project, :through => :message
-  has_one :project, :through => :task
+  #has_one :project, :through => :task
   
   def self.get_count(proj)
     if !proj.comments.nil?

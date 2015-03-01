@@ -1,23 +1,26 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.10'
+gem 'rails', '3.2.14'
 gem 'will_paginate', '> 3.0'
-gem 'mysql2', '< 0.3.11'
+#gem 'mysql2', '< 0.3.11'
+gem 'mysql2'
+gem 'jquery-rails'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 
 #gem 'sqlite3'
-gem "rake" , "10.1.1"#"0.8.7"
+gem "rake" #, "10.1.1"#"0.8.7"
 
 gem 'basecamp', '0.0.9'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.1.5'
-  gem 'coffee-rails', '~> 3.1.1'
-
+  gem 'sass-rails', "~> 3.2.3"
+  gem 'coffee-rails', "~> 3.2.1"
+  gem 'uglifier', '>= 1.0.3'
+  gem 'compass-rails'
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer'
 
@@ -25,7 +28,6 @@ group :assets do
 end
 
 gem 'jquery-ui-rails'
-gem 'jquery-rails'
 gem 'execjs'
 gem 'therubyracer'
 # To use ActiveModel has_secure_password

@@ -84,7 +84,8 @@ class CommentsController < ApplicationController
   def show
     @comment = Comment.find(params[:id])
     @message = @comment.message
-    @task = @comment.task
+    #@task = @comment.task
+    @task = nil
     @actions = get_actions(@comment.content)
     @events = get_events(@comment.content)
     @tags    = @comment.tags

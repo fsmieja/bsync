@@ -16,6 +16,9 @@ Basecamp::Application.configure do
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = false
+  
+    config.assets.precompile += %w( blueprint/screen.css blueprint/screen1200.css blueprint/print.css blueprint/ie.css blueprint/grid1200.css excanvas.js )
+
 
   # Generate digests for assets URLs
   config.assets.digest = true
@@ -29,6 +32,7 @@ Basecamp::Application.configure do
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
+
 
   # See everything in the log (default is :info)
   # config.log_level = :debug
