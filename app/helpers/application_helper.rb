@@ -28,9 +28,8 @@ module ApplicationHelper
   end
   
   def start_session
-    if !@session
-      @auths = Auth.all
-      @session = true
+    if !session[:session]
+      session[:session] = true
     end
   end
   
